@@ -38,16 +38,4 @@ public class MeduzaComponent {
         String title;
         String url;
     }
-
-//    @Data
-//    static class MeduzaResponse {
-//        Boolean has_next;
-//        MeduzaDocumentsResponse documents;
-//    }
-//
-//    @Data
-//    static class  MeduzaDocumentsResponse {
-//        String title;
-//        String url;
-//    }
 }
