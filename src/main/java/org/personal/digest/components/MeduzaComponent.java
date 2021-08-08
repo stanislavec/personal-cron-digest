@@ -1,4 +1,4 @@
-package org.personal.digest.configuration;
+package org.personal.digest.components;
 
 import lombok.Data;
 import org.apache.http.impl.client.HttpClientBuilder;

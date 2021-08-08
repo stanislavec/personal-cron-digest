@@ -1,9 +1,10 @@
-package org.personal.digest.configuration;
+package org.personal.digest.components;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONException;
+import org.personal.digest.configuration.WeatherConfuguration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;

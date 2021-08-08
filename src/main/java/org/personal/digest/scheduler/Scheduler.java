@@ -1,19 +1,18 @@
 package org.personal.digest.scheduler;
 
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
+import org.personal.digest.components.MessageBuilderComponent;
+import org.personal.digest.components.TelegramComponent;
 import org.personal.digest.configuration.BotConfiguration;
-import org.personal.digest.configuration.MeduzaComponent;
-import org.personal.digest.configuration.WeatherComponent;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 @Lazy(false)
@@ -23,34 +22,24 @@ public class Scheduler {
 
     private final TelegramBot telegramBot;
     private final BotConfiguration botConfiguration;
-    private final MeduzaComponent meduzaComponent;
-    private final WeatherComponent weatherComponent;
+    private final TelegramComponent telegramComponent;
 
-    @Scheduled(cron = "0 30 9 * * ?", zone = "Europe/Moscow")
-//    @Scheduled(fixedDelay = 5000L)
+    private final MessageBuilderComponent messageBuilderComponent;
+
+    @Scheduled(cron = "0 30 8,22 * * *", zone = "Europe/Moscow")
     public void SchedulerCallback() throws JSONException {
         try {
-            Map<String, MeduzaComponent.MeduzaDocumentsResponse> news = meduzaComponent.getMeduzaNews();
+            StringBuilder message;
 
-            StringBuilder message = new StringBuilder("\uD83D\uDC40 10 новостей к началу дня: \n\n");
+            message = messageBuilderComponent.setNewsMessage();
 
-            if (!news.isEmpty()) {
-                for (MeduzaComponent.MeduzaDocumentsResponse value : news.values()) {
-                    message.append(value.getTitle());
-                    message.append("\n \uD83D\uDC49 [Источник]");
-                    message.append("(https://meduza.io/").append(value.getUrl()).append(") \n\n");
-                }
-            } else {
-                message.append("Не смогу прогрузить новости.");
-            }
+            message.append("\n\n");
 
-            String weather = weatherComponent.getWeather();
+            message.append(messageBuilderComponent.setWeatherMessage());
 
-            if (!weather.isEmpty()) {
-                message.append("\n\n").append("\uD83E\uDE9F Погода за окном: \n\n").append(weather);
-            }
+            InlineKeyboardMarkup inlineKeyboard = telegramComponent.getInlineKeyboard();
 
-            SendMessage request = new SendMessage(botConfiguration.getChatId(), message.toString()).parseMode(ParseMode.Markdown);
+            SendMessage request = new SendMessage(botConfiguration.getChatId(), message.toString()).parseMode(ParseMode.Markdown).replyMarkup(inlineKeyboard);
             telegramBot.execute(request);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
