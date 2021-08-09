@@ -30,10 +30,10 @@ public class WeatherComponent {
 
         WeatherMessagesResponse response = Objects.requireNonNull(restTemplate.exchange(uri, HttpMethod.GET, null, WeatherResponse.class).getBody()).getData().get(0);
 
-        String message = "\uD83C\uDF21️ Температура: " + response.getTemp() + "\n";
-        message += "\uD83D\uDCA8 Ветер: " + response.getWind_cdir_full() + response.getWind_spd() + "м/с \n";
-        message += "\uD83D\uDC86\u200D♀️ Давление: " + response.getPres() + "рт.ст. \n";
-        message += "☁️ Облачность: " + response.getClouds() + "% \n";
+        String message = "\uD83C\uDF21️ Температура: " + response.getTemp() + " °C\n";
+        message += "\uD83D\uDCA8 Ветер: " + response.getWind_cdir_full() + response.getWind_spd() + " м/с \n";
+        message += "\uD83D\uDC86\u200D♀️ Давление: " + response.getPres() + " мм/рт.ст. \n";
+        message += "☁️ Облачность: " + response.getClouds() + " % \n";
 
         return message;
     }
